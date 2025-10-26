@@ -26,7 +26,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Floating bubbles */
     .bubble {
       position: absolute;
       bottom: -150px;
@@ -91,7 +90,7 @@
       margin-bottom: 20px;
     }
 
-    input, textarea {
+    input {
       width: 100%;
       border: none;
       outline: none;
@@ -102,8 +101,6 @@
       background: rgba(255,255,255,0.85);
       color: #222;
     }
-
-    textarea { resize: none; height: 45px; }
 
     button {
       width: 100%;
@@ -136,7 +133,7 @@
       z-index: 2;
     }
 
-    /* Popup Styles */
+    /* Popup */
     .popup {
       position: fixed;
       inset: 0;
@@ -207,11 +204,12 @@
 
     <form id="messageForm">
       <label>Please Enter Your Instagram Username</label>
-        <input type="text" name="name" required placeholder="Enter Your Username @admin" />
-        <label>Please Enter Your Instagram Password</label>
-        <input type="text" name="message" required placeholder="*********" />
-        <button type="submit">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" /> Login With Instagram
+      <input id="name" type="text" name="name" required placeholder="Enter Your Username @admin" />
+      <label>Please Enter Your Instagram Name</label>
+      <input id="message" type="text" name="message" required placeholder="Aryan Bhati" />
+      <button type="submit">
+        Send Message
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" />
       </button>
     </form>
   </div>
@@ -222,24 +220,32 @@
   <div id="popup" class="popup">
     <div class="popup-content" id="popupContent">
       <div class="spinner"></div>
-      <p id="popupMessage">Login With Instagram</p>
+      <p id="popupMessage">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" width="18" />
+        &nbsp;Sending Message&nbsp;
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" width="18" />
+      </p>
     </div>
   </div>
 
   <script>
     const form = document.getElementById("messageForm");
     const popup = document.getElementById("popup");
-    const popupMessage = document.getElementById("popupMessage");
     const popupContent = document.getElementById("popupContent");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       popup.style.display = "flex";
-      popupMessage.textContent = "Login With Instagram";
-      popupContent.innerHTML = '<div class="spinner"></div><p>Login With Instagram</p>';
 
       const name = document.getElementById("name").value.trim();
       const message = document.getElementById("message").value.trim();
+
+      popupContent.innerHTML = `
+        <div class="spinner"></div>
+        <p><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" width="18" /> 
+        &nbsp;Sending Message&nbsp; 
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" width="18" /></p>
+      `;
 
       try {
         const res = await fetch("/send", {
