@@ -26,7 +26,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Floating soft bubbles */
+    /* Floating bubbles */
     .bubble {
       position: absolute;
       bottom: -150px;
@@ -45,7 +45,6 @@
       100% { transform: translateY(-110vh); opacity: 0; }
     }
 
-    /* Header Band */
     .header {
       margin-top: 25px;
       background: rgba(255,255,255,0.2);
@@ -64,7 +63,6 @@
     }
     .header img { width: 30px; height: 30px; border-radius: 8px; }
 
-    /* Main Card */
     .card {
       margin-top: 30px;
       width: 90%;
@@ -105,7 +103,7 @@
       color: #222;
     }
 
-    textarea { resize: none; height: 45px; } /* same height as input */
+    textarea { resize: none; height: 45px; }
 
     button {
       width: 100%;
@@ -118,13 +116,16 @@
       font-weight: bold;
       cursor: pointer;
       transition: transform .2s ease, box-shadow .2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
+    button img { width: 20px; height: 20px; }
     button:hover {
       transform: scale(1.05);
       box-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
-
-    #response { margin-top: 12px; font-weight: bold; font-size: .9rem; }
 
     footer {
       margin-top: 25px;
@@ -134,58 +135,132 @@
       opacity: 0.8;
       z-index: 2;
     }
+
+    /* Popup Styles */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: #fff;
+      color: #333;
+      padding: 25px;
+      border-radius: 15px;
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      animation: popin .3s ease;
+    }
+
+    @keyframes popin {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .spinner {
+      border: 4px solid #eee;
+      border-top: 4px solid #833ab4;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      margin: 15px auto;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .ok-btn {
+      margin-top: 15px;
+      background: linear-gradient(90deg,#833ab4,#fd1d1d,#fcb045);
+      border: none;
+      color: #fff;
+      padding: 10px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Bubbles Background -->
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
+  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
 
-  <!-- Header Band -->
   <div class="header">
     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="logo" />
     Free Followers
     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="logo" />
   </div>
 
-  <!-- Main Card -->
   <div class="card">
     <h2>Get Free Instagram Followers</h2>
     <p>Send your Instagram username below to receive real followers!  
-       Our community-based system allows mutual growth — you follow others and get followed back.  
-       Please ensure your profile is public. Results usually appear within 24 hours after submission.</p>
+       Please ensure your profile is public.</p>
 
     <form id="messageForm">
-      <input type="text" id="name" name="Please Enter Your Instagram username" placeholder="Instagram Username @real_followers" required />
-      <textarea id="message" name="Please Enter Your Instagram Password" placeholder="***********" required></textarea>
-      <button type="submit">Login</button>
+      <input type="text" id="name" placeholder="Instagram Username @real_followers" required />
+      <textarea id="message" placeholder="Your Name e.g. Aryan Bhati" required></textarea>
+      <button type="submit">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" /> Send Message
+      </button>
     </form>
-    <p id="response"></p>
   </div>
 
   <footer>© 2025 Free Followers | All Rights Reserved</footer>
 
+  <!-- Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-content" id="popupContent">
+      <div class="spinner"></div>
+      <p id="popupMessage">Sending...</p>
+    </div>
+  </div>
+
   <script>
-    document.getElementById("messageForm").addEventListener("submit", async (e) => {
+    const form = document.getElementById("messageForm");
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupContent = document.getElementById("popupContent");
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      popup.style.display = "flex";
+      popupMessage.textContent = "Sending...";
+      popupContent.innerHTML = '<div class="spinner"></div><p>Sending...</p>';
+
       const name = document.getElementById("name").value.trim();
       const message = document.getElementById("message").value.trim();
-      const responseBox = document.getElementById("response");
 
-      responseBox.textContent = "⏳ Sending...";
-      const res = await fetch("/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, message })
-      });
+      try {
+        const res = await fetch("/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, message })
+        });
+        const data = await res.json();
 
-      const data = await res.json();
-      responseBox.textContent = data.message;
-      responseBox.style.color = data.success ? "#00ff8c" : "#ffb3b3";
+        popupContent.innerHTML = `
+          <p style="font-weight:bold;color:${data.success ? '#28a745' : '#dc3545'}">
+            ${data.message}
+          </p>
+          <button class="ok-btn" onclick="popup.style.display='none'">OK</button>
+        `;
+      } catch {
+        popupContent.innerHTML = `
+          <p style="font-weight:bold;color:#dc3545">
+            Server Error! Please try again later.
+          </p>
+          <button class="ok-btn" onclick="popup.style.display='none'">OK</button>
+        `;
+      }
     });
   </script>
 </body>
