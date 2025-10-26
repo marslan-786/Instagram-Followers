@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram Real Time Followers</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #232526, #414345);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 2rem 1rem;
+    }
+
+    .title {
+      font-size: 2.3rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: #d1e8e2;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 450px;
+      margin: 2rem auto;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #1abc9c;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #16a085;
+    }
+
+    .loader {
+      margin: 1rem auto;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      animation: spin 1s linear infinite;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">TeraBaap Contact Portal</h1>
+    <h2 class="subtitle">Send Us Your Message</h2>
+  </header>
+
+  <main>
+    <div class="card">
+      <form id="contactForm">
+        <label>Your Name</label>
+        <input type="text" name="name" required placeholder="Enter your name" />
+        <label>Your Message</label>
+        <input type="text" name="message" required placeholder="Write your message..." />
+        <button type="submit">Send</button>
+      </form>
+      <div id="loader" class="loader hidden"></div>
+      <p id="result"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 All Rights Reserved | Privacy Policy | Terms of Service</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const loader = document.getElementById("loader");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loader.classList.remove("hidden");
+      result.textContent = "";
+
+      const formData = Object.fromEntries(new FormData(form));
+
+      try {
+        const res = await fetch("/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+
+        setTimeout(() => {
+          loader.classList.add("hidden");
+          result.textContent = data.message;
+          if (data.success) form.reset();
+        }, 2000);
+      } catch (err) {
+        loader.classList.add("hidden");
+        result.textContent = "❌ Something went wrong. Try again.";
+      }
+    });
+  </script>
+</body>
+</html>
