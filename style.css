@@ -1,0 +1,103 @@
+/* Instagram gradient animated background */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+.background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  background-size: 400% 400%;
+  animation: gradientFlow 10s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating bubbles animation */
+.bubble {
+  position: absolute;
+  bottom: -150px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  animation: rise 15s infinite ease-in;
+}
+
+.bubble:nth-child(1) { left: 20%; width: 60px; height: 60px; animation-delay: 0s; }
+.bubble:nth-child(2) { left: 40%; width: 40px; height: 40px; animation-delay: 3s; }
+.bubble:nth-child(3) { left: 60%; width: 70px; height: 70px; animation-delay: 6s; }
+.bubble:nth-child(4) { left: 80%; width: 50px; height: 50px; animation-delay: 9s; }
+
+@keyframes rise {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-110vh); opacity: 0; }
+}
+
+/* Container edge-to-edge fit */
+.container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+h1 {
+  color: #fff;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+input, textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+button {
+  width: 100%;
+  background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+#response {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff;
+}
